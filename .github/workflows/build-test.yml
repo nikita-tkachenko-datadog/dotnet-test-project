@@ -13,9 +13,6 @@ jobs:
   build:
     runs-on: windows-latest
     env:
-      DD_API_KEY: ${{ secrets.DD_API_KEY }}
-      DD_ENV: CI
-      DD_CIVISIBILITY_AGENTLESS_ENABLED: 1
       SOLUTION: '**/*.sln'
 
     steps:
@@ -37,11 +34,12 @@ jobs:
         with:
           dotnet-version: 6.x
 
-      - name: Install dd-trace dotnet tool
-        run: dotnet tool update -g dd-trace
-
-      - name: Configure pipeline to use CI Visibility
-        run: dd-trace ci configure
+      - name: Configure Datadog Test Visibility
+        uses: nikita-tkachenko-datadog/gha-composite-test@v36
+        with:
+          languages: dotnet
+          service-name: ci-test-project-gha
+          api-key: ${{ secrets.DD_API_KEY }}
 
       - name: Run tests
         uses: microsoft/vstest-action@main
