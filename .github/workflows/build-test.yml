@@ -20,11 +20,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Propagate service name and API key from inputs to environment variables
-        run: |
-          echo "DD_SERVICE print-this" | awk '{print $2}'
-        shell: bash
-
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
 
